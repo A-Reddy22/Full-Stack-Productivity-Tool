@@ -34,7 +34,7 @@ export default function App() {
 
   useEffect(() => { reload(); }, []);
 
-  const onCreate = async (payload: Partial<Task> & { title: string }) => {
+  const onCreate = async (payload: { title: string; description?: string; due_date?: string | null; priority_id?: number | null }) => {
     await api<Task>("/tasks", { method: "POST", body: JSON.stringify(payload) });
     await reload();
   };
@@ -45,7 +45,8 @@ export default function App() {
   };
 
   const onDelete = async (id: number) => {
-    await fetch(`${(import.meta as any).env.VITE_API_BASE || "http://localhost:5000"}/api/tasks/${id}`, { method: "DELETE" });
+    const base = (import.meta as any).env?.VITE_API_BASE || "http://localhost:5000";
+    await fetch(`${base}/api/tasks/${id}`, { method: "DELETE" });
     await reload();
   };
 
